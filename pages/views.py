@@ -129,7 +129,7 @@ class ProductCreateView(View):
         form = ProductForm(request.POST) 
 
         if form.is_valid(): 
-            return render(request, 'products/product_created.html')  
+            return render(request, 'products/created_product.html')  
 
         else: 
             viewData = {} 
