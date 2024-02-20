@@ -35,6 +35,9 @@ class AboutPageView(TemplateView):
     
         return context 
     
+def ProductCreated(request):
+    return render(request, 'products/created_product.html')
+    
 def contactPageView(request):
     context = {
         'email' : 'luisfelipeCR7@something.com',
@@ -108,22 +111,20 @@ class ProductListView(ListView):
         context['subtitle'] = 'List of products'
         return context
 
- 
+class ProductForm(forms.ModelForm): 
 
-class ProductForm(forms.Form): 
+    class Meta:
+        model = Product 
+        fields = ['name', 'price'] 
 
-    name = forms.CharField(required=True) 
+def correct_price(self):
+    price = self.cleaned_data.get('price')
 
-    price = forms.FloatField(required=True)
+    if price is not None and price <= 0:
 
-    def correct_price(self):
-        price = self.cleaned_data.get('price')
+        raise forms.ValidationError("Price error, must be greater tha zero")
 
-        if price is not None and price < 0:
-
-            raise forms.ValidationError("Price error")
-
-        return price
+    return price   
 
 class ProductCreateView(View): 
 
@@ -131,22 +132,23 @@ class ProductCreateView(View):
 
     def get(self, request): 
 
-        form = ProductForm() 
+            form = ProductForm() 
 
-        viewData = {} 
+            viewData = {} 
 
-        viewData["title"] = "Create product" 
+            viewData["title"] = "Create product" 
 
-        viewData["form"] = form 
+            viewData["form"] = form 
 
-        return render(request, self.template_name, viewData) 
+            return render(request, self.template_name, viewData) 
 
     def post(self, request): 
 
         form = ProductForm(request.POST) 
 
-        if form.is_valid(): 
-            return render(request, 'products/created_product.html')  
+        if form.is_valid():
+            form.save() 
+            return redirect('product-created')
 
         else: 
             viewData = {} 
@@ -157,3 +159,4 @@ class ProductCreateView(View):
 
             return render(request, self.template_name, viewData)
     
+

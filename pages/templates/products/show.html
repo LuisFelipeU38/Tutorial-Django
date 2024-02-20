@@ -14,7 +14,7 @@
 
     <div class="col-md-4"> 
 
-      <img src="https://static.djangoproject.com/img/logos/django-logo-positive.svg" class="img-fluid rounded-start"> 
+      <img src="https://static.djangoproject.com/img/logos/django-logo-positive.svg" class="img-fluid rounded-start">
 
     </div> 
 
@@ -31,6 +31,11 @@
         {% else %}
             <p class="card-text"> {{product.price}}</p>
         {% endif %} 
+        {% for comment in product.comment_set.all %} 
+
+        - {{ comment.description }}<br /> 
+
+        {% endfor %}
 
       </div> 
 

@@ -11,3 +11,9 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True) 
 
     updated_at = models.DateTimeField(auto_now=True) 
+
+class Comment(models.Model):
+
+    Product = models.ForeignKey(Product, on_delete=models.CASCADE)
+
+    description = models.TextField()   
